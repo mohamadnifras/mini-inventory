@@ -19,14 +19,18 @@ const addProductService = async ({name, price, image, category}) => {
 };
 
 const getProductsService = async(page, limit)=>{
+    console.log("services" ,page,limit)
    const skip = (page - 1) * limit
 
 
-    
 
-    
+    const products = await Product.find()
+      .skip(skip)
+      .limit(limit);
 
-    return { products, total, totalManProduct, totalWomenProduct, totalKidsProduct};
+    const total = await Product.countDocuments();
+
+    return { products, total};
 }
 
 export {addProductService, getProductsService}

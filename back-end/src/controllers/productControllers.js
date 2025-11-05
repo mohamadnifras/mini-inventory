@@ -17,19 +17,19 @@ const createProduct = asyncHandler(async (req, res) => {
     });
 });
 
-const getProductController = asyncHandler(async () => {
-    const { page = 1, limit = 10 } = req.query;
-    const { products, total, totalManProduct, totalWomenProduct, totalKidsProduct } = await getProductsService({ page: parseInt(page), limit: parseInt(limit) })
+const getProductController = asyncHandler(async (req,res) => {
+   const page = parseInt(req.query.page) || 1; 
+    const limit = parseInt(req.query.limit) || 10;
+    console.log("controllers" ,page,limit)
+    const { products, total,} = await getProductsService( page, limit)
 
     return res.status(200).json({
-        count: products.length,
-        total,
-        page: Math.ceil(total / limit),
-        currentPage: parseInt(page),
-        totalManProduct,
-        totalWomenProduct,
-        totalKidsProduct,
-        products,
+         success: true,
+      page,
+      totalPages: Math.ceil(total / limit),
+      totalProducts: total,
+      count: products.length,
+      products,
     })
 })
 
