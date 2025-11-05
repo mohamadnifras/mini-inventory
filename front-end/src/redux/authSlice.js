@@ -58,6 +58,22 @@ export const logoutUser = createAsyncThunk(
     }
 
 )
+
+
+export const refreshToken = createAsyncThunk(
+    'auth/refreshToken',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.get("/auth//refresh-token");
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(handleError(error));
+        }
+    }
+);
+
+
+
 const authSlice = createSlice({
     name: "auth",
     initialState,
@@ -136,6 +152,19 @@ const authSlice = createSlice({
                 state.loading = false
                 state.error = action.payload;
             })
+            .addCase(refreshToken.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(refreshToken.fulfilled, (state,) => {
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(refreshToken.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
     }
 })
 
